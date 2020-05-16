@@ -39,18 +39,19 @@ function checkForBadWords(title) {
 }
 
 /*
- * Get up to 5 quizzes and put links to them in a box of the current page
+ * Get up to maxLinks quizzes and put links to them in a box of the current page
  *
+ * @param int maxLinks the maximum number of links to display 
  */
-function getGoodQuiz() {
+function getGoodQuiz(maxLinks) {
     let goodQuiz = false;
 
     // We don't care about the current contents of #headerBox, it's a convenient place to put our links
     jQuery('#headerBox').html('');
     jQuery('.IMGgi').remove();
 
-    // Get at most 5 additional quizzes to display for the user
-    for (let i = 0; i < 5; i++) {
+    // Get at most maxLinks additional quizzes to display for the user
+    for (let i = 0; i < maxLinks; i++) {
         // Get a random quiz
         // Use fetch, because random.php returns a HTTP 302 response which normally forces the browser to redirect
         // fetch will get the response and we can read the URL of the random quiz from it
@@ -94,4 +95,4 @@ function getGoodQuiz() {
 
 }
 
-getGoodQuiz();
+getGoodQuiz(5);

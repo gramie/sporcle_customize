@@ -47,7 +47,7 @@ function getGoodQuiz() {
 
     // We don't care about the current contents of #headerBox, it's a convenient place to put our links
     jQuery('#headerBox').html('');
-    jQuery('#IMGgi').html('');
+    jQuery('.IMGgi').remove();
 
     // Get at most 5 additional quizzes to display for the user
     for (let i = 0; i < 5; i++) {

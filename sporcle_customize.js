@@ -48,10 +48,12 @@ function getGoodQuiz(maxLinks) {
 
     // We don't care about the current contents of #headerBox, it's a convenient place to put our links
     jQuery('#headerBox').html('');
+    // Remove this box too, since it's just empty space
     jQuery('.IMGgi').remove();
 
-    // Get at most maxLinks additional quizzes to display for the user
-    for (let i = 0; i < maxLinks; i++) {
+    // Get maxLinks additional quizzes to display for the user
+    let i = 0;
+    while (i < maxLinks) {
         // Get a random quiz
         // Use fetch, because random.php returns a HTTP 302 response which normally forces the browser to redirect
         // fetch will get the response and we can read the URL of the random quiz from it
@@ -77,13 +79,19 @@ function getGoodQuiz(maxLinks) {
                             // Get the stats for this additional quiz (I have no friends, so mine is the only entry)
                             jQuery.post(scoreURL, params, function(data) {
                                 let score = "0/" + data.num_answers;
+                                let percentage = 0;
                                 if (data.scores.length > 0) {
+                                    percentage = Math.floor(data.scores[0].best_score_num * 100 / data.num_answers);
+                                    console.log(title + ": " + percentage);
                                     score = data.scores[0].best_score_num + "/" + data.num_answers
                                         + ": " + data.scores[0].play_date;
                                 }
                                 // Add this additional quiz into the #headerBox, which we don't need the original contents of
-                                jQuery('#headerBox')
-                                    .append('<p><a href="' + res.url + '">' + title + '</a> (' + score + ')</p>');
+                                if (percentage < 90) {
+                                    jQuery('#headerBox')
+                                        .append('<p><a href="' + res.url + '">' + title + '</a> (' + score + ')</p>');
+                                    i++;
+                                }
                             });
                         } else {
                             // This quiz isn't one we want
